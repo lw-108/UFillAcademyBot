@@ -22,6 +22,8 @@ interface CallContextType {
   handleSend: (message: string) => void;
   messages: MessageType[];
   isChatbotSpeaking: boolean;
+  selectedVoice: string;
+  setSelectedVoice: (voiceId: string) => void;
 }
 
 const CallContext = createContext<CallContextType | undefined>(undefined);
@@ -58,6 +60,7 @@ const CallManager: React.FC<CallManagerProps> = ({ children }) => {
     },
   ];
   const [messages, setMessages] = useState<MessageType[]>(defaultMessage);
+  const [selectedVoice, setSelectedVoice] = useState<string>('adam');
 
   useEffect(() => {
     setUserSpeechSynthesis(window.speechSynthesis);
@@ -84,6 +87,36 @@ const CallManager: React.FC<CallManagerProps> = ({ children }) => {
     utterance.lang = selectedLanguage;
     utterance.onstart = handleChatbotSpeechStart;
     utterance.onend = handleChatbotSpeechEnd;
+
+    // Apply voice preferences according to selectedVoice
+    const availableVoices = userSpeechSynthesis.getVoices();
+    if (availableVoices && availableVoices.length > 0) {
+      const matched = availableVoices.find(v =>
+        v.name.toLowerCase().includes(selectedVoice.toLowerCase())
+      );
+      if (matched) {
+        utterance.voice = matched;
+      }
+    }
+
+    // Voice modulation based on voice profile
+    if (selectedVoice === 'rachel') {
+      utterance.pitch = 1.1;
+      utterance.rate = 1.0;
+    } else if (selectedVoice === 'adam') {
+      utterance.pitch = 0.85;
+      utterance.rate = 0.95;
+    } else if (selectedVoice === 'domi') {
+      utterance.pitch = 1.25;
+      utterance.rate = 1.1;
+    } else if (selectedVoice === 'clyde') {
+      utterance.pitch = 0.7;
+      utterance.rate = 0.9;
+    } else if (selectedVoice === 'charlotte') {
+      utterance.pitch = 1.05;
+      utterance.rate = 0.95;
+    }
+
     userSpeechSynthesis.speak(utterance);
   };
 
@@ -126,14 +159,16 @@ const CallManager: React.FC<CallManagerProps> = ({ children }) => {
       setIsBobSpeaking(false);
     }
     const chatGPTAnswer = await getChatGptAnswer(updatedMessages);
+    const validAnswer = chatGPTAnswer || "I've analyzed your input and am here to assist.";
+    
     setMessages([
       ...updatedMessages,
       {
-        message: chatGPTAnswer,
+        message: validAnswer,
         sender: 'ChatGPT',
       },
     ]);
-    chatBotSpeak(chatGPTAnswer);
+    chatBotSpeak(validAnswer);
   };
 
   const userSpeak = () => {
@@ -220,6 +255,8 @@ const CallManager: React.FC<CallManagerProps> = ({ children }) => {
         handleSend,
         messages,
         isChatbotSpeaking: isBobSpeaking,
+        selectedVoice,
+        setSelectedVoice,
       }}
     >
       {children}

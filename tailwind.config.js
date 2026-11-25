@@ -7,6 +7,24 @@ module.exports = {
   ],
   theme: {
     extend: {
+      colors: {
+        prime: {
+          DEFAULT: '#ff4500', // high contrast reddish orange
+          light: '#ff6b35',
+          dark: '#e03a00',
+        },
+        futuristic: {
+          bg: '#0d0f12',
+          surface: '#161a1f',
+          panel: '#1b2027',
+          border: '#262c35',
+          borderLight: '#39424e',
+          textMuted: '#94a3b8',
+        },
+      },
+      fontFamily: {
+        sans: ['var(--font-satoshi)', 'sans-serif'],
+      },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
@@ -14,22 +32,13 @@ module.exports = {
     },
     screens: {
       xxs: '0',
-      // => @media (max-width:320px) { ... }
       xs: '320px',
-      // => @media (min-width:320px) { ... }
-
       sm: '420px',
-      // => @media (min-width:420px) { ... }
-
       md: '640px',
-      // => @media (min-width: 640px) { ... }
-
       lg: '1024px',
-      // => @media (min-width: 1024px) { ... }
-
       xl: '1280px',
-      // => @media (min-width: 1280px) { ... }
     },
   },
   plugins: [],
 };
+

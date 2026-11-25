@@ -1,33 +1,17 @@
 import CallBob from './CallBob';
-import LanguageDropdown from './LanguageDropdown';
-import { Layout } from 'antd';
 import LanguageManager from './LanguageManager';
 import { Fragment } from 'react';
-import { CallHistory } from './CallHistory';
-import { GithubLink } from './GithubLink';
-import ConversionIdeasModal from './ConversationIdeasModal';
-import CallManager from './CallManager';
-const { Header, Content } = Layout;
+
 export default function MainLayout() {
   return (
     <Fragment>
-      <Layout className="h-screen w-screen bg-[#45badd] lg:p-10 p-5 pt-0 lg:pr-15 ">
+      <div className="h-screen w-screen max-h-screen overflow-hidden bg-[#090a0d] text-white p-3 md:p-5 font-sans flex flex-col box-border">
         <LanguageManager>
-          <CallManager>
-            <Header className="flex bg-[#45badd] items-center h-12 flex-row px-0 justify-between">
-              <GithubLink />
-              <div className="flex items-center">
-                <ConversionIdeasModal />
-                <CallHistory />
-                <LanguageDropdown />
-              </div>
-            </Header>
-            <Content>
-              <CallBob />
-            </Content>
-          </CallManager>
+          <main className="w-full h-full max-h-full bg-[#090a0d] flex flex-col overflow-hidden min-h-0">
+            <CallBob />
+          </main>
         </LanguageManager>
-      </Layout>
+      </div>
     </Fragment>
   );
 }
